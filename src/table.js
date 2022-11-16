@@ -10,13 +10,12 @@ export default function Table({head, body, searchable}) {
 	const [sorting, setSorting] = useState(false)
 	const [search, setSearch] = useState('')
 	const filteredData = body && body.filter(
-		items => items.some(item => {
-			console.log(item)
-			return (item?.key || item?.props?.searchableText || item).toString().toLocaleLowerCase('TR').includes(search.toLocaleLowerCase('TR'))
-		})
+		items => items.some(
+			item => (item?.key || item?.props?.searchableText || item).toString().toLocaleLowerCase('TR').includes(search.toLocaleLowerCase('TR'))
+		)
 	).sort((a, b) => {
 		if (sorting?.orderBy === 'asc') {
-			return a[sorting.key].toString().localeCompare(b[sorting.key])
+			return (a[sorting.key]?.key || a[sorting.key]?.props?.searchableText || a[sorting.key]).toString().localeCompare(b[sorting.key]?.key || b[sorting.key]?.props?.searchableText || b[sorting.key])
 		}
 		if (sorting?.orderBy === 'desc') {
 			return b[sorting.key].toString().localeCompare(a[sorting.key])
@@ -49,7 +48,7 @@ export default function Table({head, body, searchable}) {
 					)}
 				</div>
 			)}
-			{isMobile && <TableMobile head={head} body={filteredData} />}
+			{isMobile && <TableMobile head={head} body={filteredData}/>}
 			{!isMobile && (
 				<div className="w-full  border rounded p4">
 					<table className="w-full">
